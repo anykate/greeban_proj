@@ -28,7 +28,7 @@ def all_products(request):
             quantity = cart.get(product_id)
             if quantity:
                 if remove:
-                    if quantity <= 1:
+                    if quantity <= 0:
                         cart.pop(product_id)
                         # request.session.get('cart').clear()
                     else:
