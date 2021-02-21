@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cart %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<main>
+	<section class="py-5 text-center container">
+		<div class="row py-lg-5">
+			<div class="col-lg-6 col-md-8 mx-auto">
+				<h1 class="h1 fw-bold">Assignment</h1>
+				<ul class="list-group-flush list-unstyled">
+					<li class="list-group-item text-muted">Create two pager site with home and cart pages.
+						Add products(cards) on homepage with plus minus buttons.</li>
+					<li class="list-group-item text-muted">Use ajax to prevent webpage from loading everytime.
+						Also create a user based session and store data in the database. Based on user login show
+						respective carts items</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<div class="album py-5 bg-light">
+		<div class="container">
+			<div class="pb-3 h5">All Books</div>
+			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
+				{% for product in products %}
+				<div class="col">
+					<div class="card shadow-sm">
+						<img class="img-fluid" alt="Responsive image" src="{{ product.image.url }}" />
+						<div class="card-body">
+							<p class="card-text">
+								<a class="text-dark text-decoration-none"
+									href="{{ product.get_absolute_url }}">{{ product.title }}</a>
+							</p>
+						</div>
+						<div class="card-footer">
+							<div class="d-flex justify-content-between align-items-center">
+								<form action="" method="POST" class="form_prod">
+									{% csrf_token %}
+									<input hidden type="text" value="{{ product.id }}" name="product_id"
+										id="product_id" />
+									<input type="submit" class="btn btn-sm btn-outline-secondary" value="Add" />
+								</form>
+								<div class="text-center" id="prod_{{ product.id }}">
+									{{ product|cart_qty:request.session.cart }}
+								</div>
+								<form action="" method="POST" class="form_prod">
+									{% csrf_token %}
+									<input hidden type="text" value="{{ product.id }}" name="product_id"
+										id="product_id" />
+									<input hidden type="text" name="remove" value="True" id="remove" />
+									<input type="submit" class="btn btn-sm btn-outline-secondary" value="Remove" />
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock %}
